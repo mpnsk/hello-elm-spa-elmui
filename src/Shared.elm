@@ -71,27 +71,35 @@ view { page, toMsg } model =
         _ =
             log "x" page
 
-        myBody =
+        body =
             [ column [ padding 20, spacing 20, height fill ]
                 [ row [ spacing 20 ]
-                    [ link [ Font.color (rgb 0 0.25 0.5), Font.underline ] { url = Route.toString Route.Top, label = text "Homepage" }
-                    , link [ Font.color (rgb 0 0.25 0.5), Font.underline ] { url = Route.toString Route.NotFound, label = text "Not found" }
-                    , text "this is the shared part"
-                    , text (Debug.toString model)
+                    [ createLink Route.Top "Home"
+                    , createLink Route.NotFound "!found"
+                    , createLink Route.AStaticPage "static link"
                     ]
                 , column [ height fill ] page.body
                 ]
             ]
 
-        alternativeBody =
-            [ text "this is alternative" ]
+        homeBody =
+            [ column [ padding 20, spacing 20, height fill ]
+                [ row [ spacing 20 ]
+                    [ text "this is alternative" ]
+                ]
+            ]
     in
     { title = page.title
     , body =
         case page.title of
             "Homepage" ->
-                alternativeBody
+                homeBody
 
             _ ->
-                myBody
+                body
     }
+
+
+createLink : Route.Route -> String -> Element msg
+createLink r s =
+    link [ Font.color (rgb 0 0.25 0.5), Font.underline ] { url = Route.toString r, label = text s }
